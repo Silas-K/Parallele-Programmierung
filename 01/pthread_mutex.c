@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 int counter = 0;
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 
 void* print_message_thread(void* ptr)
 {
@@ -11,23 +12,13 @@ void* print_message_thread(void* ptr)
     message = (char*) ptr;
     printf("%s \n", message);
     
+    pthread_mutex_lock(&mutex1);
     for (int i = 0; i < 100000; i++) 
     {
         counter ++;
     }
-}
 
-
-void* print_message_thread2(void* ptr)
-{
-    char* message;
-    message = (char*) ptr;
-    printf("%s \n", message);
-    
-    for (int i = 0; i < 100000; i++) 
-    {
-        counter ++;
-    }
+    pthread_mutex_unlock(&mutex1);
 }
 
 int main()
@@ -39,7 +30,7 @@ int main()
     int iret1, iret2;
 
     iret1 = pthread_create(&thread1, NULL, print_message_thread, (void*) message1);
-    iret2 = pthread_create(&thread2, NULL, print_message_thread2, (void*) message2);
+    iret2 = pthread_create(&thread2, NULL, print_message_thread, (void*) message2);
 
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);

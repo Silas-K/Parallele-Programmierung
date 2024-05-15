@@ -1,0 +1,9 @@
+# Compile
+mpicc integrate.c -o integrate -lm
+
+# Run
+mpirun --host localhost:25 -np 7 ./integrate 
+mpirun --hostfile hostfile -np 7 ./integrate 
+mpirun --oversubscribe -np 7 ./integrate
+mpirun --oversubscribe -np 50 ./integrate 
+

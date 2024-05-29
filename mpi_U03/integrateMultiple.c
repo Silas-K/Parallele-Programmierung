@@ -9,10 +9,11 @@ double integrate(double from, double to, double (*func)())
     double sum = 0.0, x;
 
     // Untersumme berechnen
-    for (x = from; x <= (to - h); x += h)
-    {
-        sum += func(x);
-    }
+    x = from;
+    sum += func(x);
+    printf("Incrementing %lf\n", func(x));
+    printf("X: %lf\n", x);
+    printf("Adding %lf\n", h * sum);
     return h * sum;
 }
 
@@ -44,15 +45,14 @@ int main(int argc, char** argv)
         // Teilergebnisse von anderen Prozessen empfangen
         for (int i = 1; i < size; ++i)
         {
-            MPI_Recv(&tmp,       // Empfangsbuffer
-                     1,          // Länge
-                     MPI_DOUBLE, // Datentyp
-                     i,          // Rank des Senders
-                     0,          // Tag
-                     MPI_COMM_WORLD,
-                     &status // Status-Object
-            );
+            MPI_Recv(&tmp, 1, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, &status);
             res += tmp;
+            // Empfangsbuffer
+            // Länge
+            // Datentyp
+            // Rank des Senders
+            // Tag
+            // Status-Object
         }
         printf("Result: %.15lf\n", res);
     }
